@@ -1,3 +1,4 @@
+DROP DATABASE `house-of-fire`;
 CREATE DATABASE  IF NOT EXISTS `house-of-fire`;
 USE `house-of-fire`;
 
