@@ -8,7 +8,7 @@ CREATE TABLE `product` (
   `type` varchar(100) NOT NULL,
   `description` text,
   `price` float NOT NULL,
-  `qty_on_hand` int NOT NULL,
+  `qty_on_hand` int NOT NULL DEFAULT 0,
   PRIMARY KEY (`product_id`)
 );
 
@@ -90,9 +90,9 @@ insert into user
     ('Charles', 'Owens', 'marissa.medhurst@mckenzie-mertz.io', '501 Mitchell Burg', 'HI', '46259-4311', 'East Jere', 'USA'),
     ('Jeremy', 'Mcdaniel', 'arvilla_zieme@lesch.co', '146 Clair Dam', 'LA', '28723', 'Hectorberg', 'USA'),
     ('Janet', 'Thon', 'sadie@oberbrunner.com', '372 Sam Knolls', 'KS', '49068', 'Lake Lala', 'USA'),
-    ('David', 'Drake', 'yuk.bahringer@morar-baumbach.org', '9414 Emard Roads', 'UT', '91335', 'Jaynemouth', 'USA'),
+    ('David', 'Drake', 'yuk.bahringer@morar-baumbach.org', '9414 Emard Roads', 'UT', '91335', 'Jaynemouth', 'USA');
 
-insert into product (name, type, price, description, qty_on_hand)
+insert into product (name, type, price, description)
 	values
     ('BlazeGuard','Fire-resistant clothing',49.99,'BlazeGuard offers premium fire-resistant clothing that combines style and safety. Made with advanced flame-resistant materials, this collection provides reliable protection in high-temperature environments.'),
     ('InfernoScent','Fragrance line',29.99,'Experience the captivating allure of InfernoScent, a fragrance line inspired by the mesmerizing beauty of fire. Each scent embodies warmth and intensity, leaving a trail of seductive notes that ignite the senses.'),
@@ -100,7 +100,7 @@ insert into product (name, type, price, description, qty_on_hand)
     ('EmberGlow','Home decor candles',19.99,'Create an inviting ambiance with EmberGlow home decor candles. Crafted with care, these candles cast a warm, comforting glow that dances playfully, bringing the enchanting essence of flickering flames to your living space.'),
     ('PyroPeak','Outdoor adventure gear',99.99,'Conquer the great outdoors with PyroPeak, a range of premium adventure gear designed for thrill-seekers. From rugged backpacks to durable tents and innovative tools, PyroPeak equips you for unforgettable expeditions.'),
     ('FireSpark','Fireworks',19.99,'Light up the night sky with FireSpark fireworks. Crafted with meticulous attention to detail, these vibrant and spectacular pyrotechnics deliver an awe-inspiring display of dazzling colors and breathtaking patterns.'),
-    ('IgniteX','High-performance car engine',5999.99,'Unleash the power of IgniteX, a high-performance car engine that sets your vehicle ablaze with unrivaled speed and exhilaration. Built with cutting-edge technology and precision engineering, it's the ultimate choice for automotive enthusiasts.'),
+    ('IgniteX','High-performance car engine',5999.99,'Unleash the power of IgniteX, a high-performance car engine that sets your vehicle ablaze with unrivaled speed and exhilaration. Built with cutting-edge technology and precision engineering, it\'s the ultimate choice for automotive enthusiasts.'),
     ('ScorchWave','Surfboard',499.99,'Ride the ScorchWave and catch the wildest waves with confidence. This high-performance surfboard is meticulously crafted to deliver unmatched stability, maneuverability, and speed, giving you the ultimate surfing experience.'),
     ('HeatRider','Heated motorcycle gloves',149.99,'Keep your hands warm and comfortable during chilly rides with HeatRider heated motorcycle gloves. These technologically advanced gloves feature built-in heating elements and superior insulation, ensuring optimal warmth and dexterity on the road.'),
     ('FieryAura','Yoga mat',39.99,'Enhance your yoga practice with FieryAura, a premium yoga mat that radiates energy and inspires focus. Its textured surface provides a secure grip, while the vibrant fire-inspired design adds a touch of passion to your sessions.'),
@@ -108,23 +108,23 @@ insert into product (name, type, price, description, qty_on_hand)
     ('InfernoBurst','Hot sauce',7.99,'Prepare your taste buds for a fiery explosion with InfernoBurst hot sauce. Made from a unique blend of the hottest peppers and spices, this sauce adds intense heat and a bold kick to your favorite dishes.'),
     ('BurnoutBlaze','Automotive racing tires',199.99,'Experience unmatched speed and precision on the racetrack with BurnoutBlaze racing tires. Engineered for maximum grip and durability, these high-performance tires deliver superior handling and control, setting the stage for victory.'),
     ('TorchFlame','Portable camping stove',49.99,'Embrace the spirit of adventure with TorchFlame, a portable camping stove that ensures delicious meals even in the most remote locations. With its powerful flame and compact design, it provides reliable heat for cooking outdoors.'),
-    ('IgnitionGlow','Lighter',9.99,'IgnitionGlow is not just an ordinary lighter—it's a compact and reliable fire-starting companion. With its sleek design, powerful flame, and easy-to-use functionality, it guarantees quick and hassle-free ignition in any situation.'),
-    ('FirestormX','Gaming laptop',1299.99,'Unleash your gaming prowess with FirestormX, the ultimate gaming laptop that sets the gaming world ablaze. Boasting top-of-the-line specifications, stunning visuals, and blazing-fast performance, it's your gateway to immersive gaming adventures.'),
+    ('IgnitionGlow','Lighter',9.99,'IgnitionGlow is not just an ordinary lighter—it\'s a compact and reliable fire-starting companion. With its sleek design, powerful flame, and easy-to-use functionality, it guarantees quick and hassle-free ignition in any situation.'),
+    ('FirestormX','Gaming laptop',1299.99,'Unleash your gaming prowess with FirestormX, the ultimate gaming laptop that sets the gaming world ablaze. Boasting top-of-the-line specifications, stunning visuals, and blazing-fast performance, it\'s your gateway to immersive gaming adventures.'),
     ('Emberstrike','Martial arts gloves',79.99,'Enhance your combat skills with Emberstrike, the gloves that combine superior protection with exceptional flexibility. Engineered with state-of-the-art materials and reinforced padding, these gloves empower you to unleash your full martial arts potential.'),
     ('BlazeTrail','Hiking backpack',89.99,'Embark on epic outdoor expeditions with BlazeTrail, the hiking backpack that ignites your wanderlust. Crafted with durable materials and smart storage compartments, it offers ample space and comfort for all your hiking essentials.'),
     ('PyroWave','Bluetooth speaker',69.99,'Set the mood and amplify your music with PyroWave, the Bluetooth speaker that delivers explosive sound quality. With its dynamic audio performance and captivating light effects, it creates an immersive auditory and visual experience.'),
-    ('FlameShimmer','Hair styling tool',59.99,'Elevate your hairstyling game with FlameShimmer, the versatile hair styling tool that adds a touch of glamour to your locks. From sleek straightening to voluminous curls, it's your go-to companion for achieving stunning hairstyles with a fiery flair.'),
+    ('FlameShimmer','Hair styling tool',59.99,'Elevate your hairstyling game with FlameShimmer, the versatile hair styling tool that adds a touch of glamour to your locks. From sleek straightening to voluminous curls, it\'s your go-to companion for achieving stunning hairstyles with a fiery flair.'),
     ('IncineratorX','BBQ grill',299.99,'Ignite your inner grill master with the IncineratorX BBQ grill. This high-quality grill features advanced temperature control, ample cooking space, and a robust construction that ensures even heat distribution, allowing you to sear and sizzle your favorite meats and vegetables to perfection.'),
     ('IgniteForce','Fitness supplement',39.99,'IgniteForce is the ultimate fitness supplement designed to unleash your maximum potential. Packed with powerful ingredients and formulated to boost energy, enhance endurance, and accelerate recovery, it fuels your workouts and helps you achieve your fitness goals.'),
     ('ScorchFlicker','Photography light kit',199.99,'Illuminate your photography with ScorchFlicker, a professional light kit that brings out the true brilliance of your subjects. With adjustable intensity and temperature settings, it offers precise lighting control for captivating and vibrant shots.'),
     ('InfernoGaze','Sunglasses',149.99,'Set your sights on style with InfernoGaze sunglasses. These sleek and contemporary shades feature polarized lenses that not only provide exceptional UV protection but also offer enhanced clarity and a fiery aesthetic that complements any outfit.'),
     ('HeatWave','Heating pad',29.99,'Ease tension and soothe your muscles with HeatWave heating pad. Designed for targeted relief, this portable and adjustable pad delivers a comforting heat that penetrates deep into your body, providing soothing warmth and relaxation.'),
-    ('FireGlimmer','Jewelry collection',299.99,'FireGlimmer presents an exquisite jewelry collection that captures the essence of fire's radiant beauty. Crafted with precision and adorned with sparkling gemstones, each piece showcases a captivating and fiery brilliance that illuminates any occasion.'),
+    ('FireGlimmer','Jewelry collection',299.99,'FireGlimmer presents an exquisite jewelry collection that captures the essence of fire\'s radiant beauty. Crafted with precision and adorned with sparkling gemstones, each piece showcases a captivating and fiery brilliance that illuminates any occasion.'),
     ('BlazeBurst','Action figure',14.99,'Unleash the action-packed adventures with BlazeBurst action figures. These highly detailed and poseable figures embody the spirit of bravery and heroism, bringing the excitement of fiery battles and epic storytelling to life.'),
     ('EmberVortex','Vacuum cleaner',149.99,'Experience the cleaning power of EmberVortex, a high-performance vacuum cleaner that leaves no trace of dust or debris. With its advanced suction technology and innovative design, it effortlessly captures dirt, ensuring a spotless and pristine environment.'),
     ('InfernoRise','Energy bar',2.49,'Fuel your active lifestyle with InfernoRise energy bars. Bursting with nutritious ingredients and a blend of energizing flavors, these bars provide a quick and convenient source of sustainable energy for those who are always on the go.'),
     ('BurnoutSpark','Racing motorcycle',12999.99,'Unleash the thrill of speed with BurnoutSpark racing motorcycles. Built for adrenaline seekers, these powerful and agile bikes combine cutting-edge engineering, sleek aesthetics, and unrivaled performance to dominate the racetrack.'),
-    ('TorchFury','Flashlight',19.99,'Illuminate the darkness with TorchFury, the reliable and powerful flashlight that guides your path. Featuring a long-lasting battery, durable construction, and a focused beam of intense light, it's the perfect companion for outdoor adventures and emergency situations.'),
+    ('TorchFury','Flashlight',19.99,'Illuminate the darkness with TorchFury, the reliable and powerful flashlight that guides your path. Featuring a long-lasting battery, durable construction, and a focused beam of intense light, it\'s the perfect companion for outdoor adventures and emergency situations.'),
     ('IgnitionGlow','Fire pit',199.99,'Create a warm and inviting atmosphere with IgnitionGlow fire pit. Crafted with premium materials and a sleek design, this fire pit not only provides a captivating display of flickering flames but also offers a cozy gathering spot for memorable outdoor moments.'),
     ('FirestormPulse','Wireless earbuds',99.99,'Immerse yourself in music with FirestormPulse wireless earbuds. Featuring high-fidelity sound, comfortable fit, and seamless connectivity, these earbuds deliver an electrifying audio experience, allowing you to enjoy your favorite tunes with fiery passion.'),
     ('EmberFlash','Camera flash',79.99,'Illuminate your photography with EmberFlash camera flash. Designed to enhance lighting in low-light situations, this versatile flash unit delivers a burst of light that ignites every scene, capturing the finest details and adding a captivating glow to your photos.'),
@@ -161,5 +161,3 @@ insert into transaction (product_id, purchase_date, quantity, user_id)
     (2, '2022-12-01', 500, 2),
     (4, '2022-10-10', 200, 3),
      (1, '2022-07-17', 10, 1);
- 
-SELECT * from user;
