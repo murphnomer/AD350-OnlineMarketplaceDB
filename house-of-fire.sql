@@ -31,7 +31,7 @@ CREATE TABLE `review` (
   `review_date` datetime NOT NULL,
   `user_id` int NOT NULL,
   `rating` int NOT NULL,
-  `review_text` varchar(200) DEFAULT NULL,
+  `review_text` text DEFAULT NULL,
   PRIMARY KEY (`review_id`),
   CONSTRAINT `review_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
   CONSTRAINT `review_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
