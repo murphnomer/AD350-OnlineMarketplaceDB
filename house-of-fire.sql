@@ -51,11 +51,11 @@ CREATE TABLE `transaction` (
 insert into user 
 	(first_name, last_name, email, address, state, postal_code, city, country)
 	values
-    ('jared', 'scarr', 'email@email.com', '1234 Nowhere street', 'WA', 98026, 'Edmonds', 'USA'),
-    ('mike', 'murphy', 'themurph@email.com', '1234 Nowhere street', 'WA', 98026, 'Edmonds', 'USA'),
-    ('derrek', 'do', 'derrekdoesthings@email.com', '1234 Nowhere street', 'WA', 98026, 'Edmonds', 'USA'),
-    ('petar', 'spasic', 'petarpetarpetar@email.com', '1234 Nowhere street', 'WA', 98026, 'Edmonds', 'USA'),
-    ('groucho', 'marx', 'groucho@themarxbrothers.com', '18484 58th Street', 'NY', 98438, 'New York', 'USA'),
+    ('jared', 'scarr', 'email@email.com', '1234 Nowhere street', 'WA', '98026', 'Edmonds', 'USA'),
+    ('mike', 'murphy', 'themurph@email.com', '1234 Nowhere street', 'WA', '98026', 'Edmonds', 'USA'),
+    ('derrek', 'do', 'derrekdoesthings@email.com', '1234 Nowhere street', 'WA', '98026', 'Edmonds', 'USA'),
+    ('petar', 'spasic', 'petarpetarpetar@email.com', '1234 Nowhere street', 'WA', '98026', 'Edmonds', 'USA'),
+    ('groucho', 'marx', 'groucho@themarxbrothers.com', '18484 58th Street', 'NY', '98438', 'New York', 'USA'),
     ('David', 'Miller', 'hermila@ritchie-pouros.info', '2605 Pollich Port', 'WA', '67925', 'Shaniceborough', 'USA'),
     ('Antonia', 'Olivas', 'sanford.treutel@bashirian-rice.com', '9805 Jast Oval', 'UT', '01450', 'North Keira', 'USA'),
     ('Shirley', 'Henderson', 'ricki.schmitt@senger.co', '4578 Pa Squares', 'NM', '00757', 'New Gregorytown', 'USA'),
