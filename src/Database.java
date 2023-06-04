@@ -16,12 +16,12 @@ public class Database {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(connectionUrl, USER_NAME, PASSWORD);
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from product");
+            ResultSet rs = stmt.executeQuery("select * from product limit 10");
             Formatter fmt = new Formatter();
-            fmt.format("%1s %10s %22s %21s %15s %15s\n", "product_id", "name", "type", "price", "qty_on_hand", "description");
+            fmt.format("%1s %15s %25s %20s %15s %15s\n", "product_id", "name", "type", "price", "qty_on_hand", "description");
 
             while (rs.next()) {
-                fmt.format("%1s %22s %30s %10s %12s %1s\n",
+                fmt.format("%10s %20s %30s %10s %12s %1s\n",
                         rs.getInt(1), // product_id
                         rs.getString(2), // name
                         rs.getString(3), // type
