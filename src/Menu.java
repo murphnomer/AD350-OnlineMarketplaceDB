@@ -42,7 +42,7 @@ public class Menu {
         System.out.println("House-of-Fire-Online-Marketplace");
         System.out.println("---------------------------------");
         System.out.println("For Professor Kyle Bastien");
-        System.out.println("Written by Derrek Do, Mike Murphy, and Jared Scarr");
+        System.out.println("Written by Derrek Do, Mike Murphy, Jared Scarr, and Petar Spasic");
         System.out.println();
         System.out.println("Provided as is with no guarantees. Use at your own risk.");
     }
