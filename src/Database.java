@@ -23,7 +23,6 @@ public class Database {
 
         try {
             con = DriverManager.getConnection(connectionUrl, USER_NAME, PASSWORD);
-//            con.close();
         } catch (SQLException e) {
             System.out.println("Connection failed.");
             System.out.println(e);
