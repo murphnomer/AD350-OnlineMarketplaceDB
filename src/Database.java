@@ -7,16 +7,48 @@ public class Database {
     private static final String PASSWORD = System.getenv("PASSWORD");
     private final String connectionUrl = "jdbc:mysql://127.0.0.1:3306/" + DB_NAME;
 
+    private Connection con = null;
+
     /**
      * Print all products to the console.
      */
-    public void getProducts() {
-        Connection con = null;
+    public void connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("JDBC driver not found. Add dependency mySQL Connector/J for your operating system.");
+            e.printStackTrace();
+            return;
+        }
+
+        try {
             con = DriverManager.getConnection(connectionUrl, USER_NAME, PASSWORD);
+//            con.close();
+        } catch (SQLException e) {
+            System.out.println("Connection failed.");
+            System.out.println(e);
+        }
+    }
+
+    public void close() {
+        try {
+            con.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                    System.out.println("Database Connection Terminated");
+                } catch (Exception ignored) {}
+            }
+        }
+    }
+
+    public void getAllProductsInInventory() {
+        try {
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from product limit 10");
+            ResultSet rs = stmt.executeQuery("select * from product where qty_on_hand > 0");
             Formatter fmt = new Formatter();
             fmt.format("%1s %15s %25s %20s %15s %15s\n", "product_id", "name", "type", "price", "qty_on_hand", "description");
 
@@ -31,16 +63,10 @@ public class Database {
                 );
             }
             System.out.println(fmt);
-            con.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            System.out.println("Error when attempting to get products in inventory.");
             System.out.println(e);
-        } finally {
-            if (con != null) {
-                try {
-                    con.close();
-                    System.out.println("Database Connection Terminated");
-                } catch (Exception ignored) {}
-            }
         }
     }
+
 }
