@@ -10,7 +10,8 @@ public class Database {
     private Connection con = null;
 
     /**
-     * Print all products to the console.
+     * Connect to mySQL database.
+     * Prerequisite: mySQL ConnectorJ is installed.
      */
     public void connect() {
         try {
@@ -29,6 +30,9 @@ public class Database {
         }
     }
 
+    /**
+     * Close the connection. If any error occurs the "finally" clause will terminate the connection anyway.
+     */
     public void close() {
         try {
             con.close();
@@ -44,6 +48,11 @@ public class Database {
         }
     }
 
+    /**
+     * Prints the results of a query to the product table given a result set from a product table query.
+     * @param rs - ResultSet from a query to the product table.
+     * @throws SQLException - if an error occurs processing the result set.
+     */
     private void printProductTableResults(ResultSet rs) throws SQLException {
         Formatter fmt = new Formatter();
         fmt.format("%1s %15s %25s %20s %15s %15s\n", "product_id", "name", "type", "price", "qty_on_hand", "description");
@@ -61,6 +70,10 @@ public class Database {
         System.out.println(fmt);
     }
 
+    /**
+     * Query the product table for all products that have a quantity on hand > 0.
+     * Print the results to the console.
+     */
     public void getAllProductsInInventory() {
         try {
             Statement stmt = con.createStatement();
