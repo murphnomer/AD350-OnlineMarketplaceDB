@@ -44,24 +44,28 @@ public class Database {
         }
     }
 
+    private void printProductTableResults(ResultSet rs) throws SQLException {
+        Formatter fmt = new Formatter();
+        fmt.format("%1s %15s %25s %20s %15s %15s\n", "product_id", "name", "type", "price", "qty_on_hand", "description");
+
+        while (rs.next()) {
+            fmt.format("%10s %20s %30s %10s %12s %1s\n",
+                    rs.getInt(1), // product_id
+                    rs.getString(2), // name
+                    rs.getString(3), // type
+                    rs.getFloat(5), // price
+                    rs.getInt(6), // qty_on_hand
+                    "       " + rs.getString(4) // description with left padding added
+            );
+        }
+        System.out.println(fmt);
+    }
+
     public void getAllProductsInInventory() {
         try {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("select * from product where qty_on_hand > 0");
-            Formatter fmt = new Formatter();
-            fmt.format("%1s %15s %25s %20s %15s %15s\n", "product_id", "name", "type", "price", "qty_on_hand", "description");
-
-            while (rs.next()) {
-                fmt.format("%10s %20s %30s %10s %12s %1s\n",
-                        rs.getInt(1), // product_id
-                        rs.getString(2), // name
-                        rs.getString(3), // type
-                        rs.getFloat(5), // price
-                        rs.getInt(6), // qty_on_hand
-                        "       " + rs.getString(4) // description with left padding added
-                );
-            }
-            System.out.println(fmt);
+            printProductTableResults(rs);
         } catch (SQLException e) {
             System.out.println("Error when attempting to get products in inventory.");
             System.out.println(e);
