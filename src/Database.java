@@ -76,11 +76,29 @@ public class Database {
      */
     public void getAllProductsInInventory() {
         try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from product where qty_on_hand > 0");
+            String query = "select * from product where qty_on_hand > 0";
+            PreparedStatement prepStmt = con.prepareStatement(query);
+            ResultSet rs = prepStmt.executeQuery();
             printProductTableResults(rs);
         } catch (SQLException e) {
             System.out.println("Error when attempting to get products in inventory.");
+            System.out.println(e);
+        }
+    }
+
+    public void insertProduct(Product prod) {
+        try {
+            String query = "insert into product (name, type, price, qty_on_hand, description) values (?, ?, ?, ?, ?)";
+            PreparedStatement prepStmt = con.prepareStatement(query);
+            prepStmt.setString(1, prod.getName());
+            prepStmt.setString(2, prod.getType());
+            prepStmt.setFloat(3, prod.getPrice());
+            prepStmt.setInt(4, prod.getQty_on_hand());
+            prepStmt.setString(5, prod.getDescription());
+            int rows_added = prepStmt.executeUpdate();
+            System.out.println(Integer.toString(rows_added) + " product added.");
+        } catch (SQLException e) {
+            System.out.print("Error on insert.");
             System.out.println(e);
         }
     }
