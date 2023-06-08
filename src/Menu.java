@@ -50,6 +50,7 @@ public class Menu {
     public void printMainMenu() {
         int selection = -1;
         boolean validInput = false;
+
         while (!validInput) {
             System.out.println("-----------------------------------------------------------");
             System.out.println("Please select from the following options:");
@@ -58,12 +59,10 @@ public class Menu {
             }
             System.out.println();
             try {
-                selection = scanner.nextInt();
+                selection = Integer.parseInt(scanner.nextLine());
                 validInput = true;
             } catch (InputMismatchException e) {
                 System.out.println("What you entered was not a number.");
-                // clear the scanner
-                scanner.nextLine();
             }
         }
         if (selection == exitStatus) {
@@ -71,23 +70,29 @@ public class Menu {
             System.out.println("Thank you for using House-of-Fire-Marketplace! See you again soon!\n");
         } else {
             processSelection(selection);
+            System.out.println("\nPress enter to return to the menu");
+            scanner.nextLine();
+            printMainMenu();
         }
-        scanner.nextLine();
-        System.out.println("\nPress enter to return to the menu");
-        scanner.nextLine();
-        printMainMenu();
     }
 
     /**
      * Route the selection to the appropriate function.
+     *
      * @param selection - int represents the user's menu selection.
+     * @return - success of the action.
      */
     private void processSelection(int selection) {
         // TODO: replace the below print statements with function calls like case 1
         System.out.println();
         switch (selection) {
             case 1 -> db.getAllProductsInInventory();
-            case 2 -> System.out.println("Create a new product");
+            case 2 -> {
+                Product prod = getProductFromUser();
+                if (prod != null) {
+                    db.insertProduct(prod);
+                }
+            }
             case 3 -> System.out.println("Update inventory of a specific product");
             case 4 -> System.out.println("Delete a product");
             case 5 -> System.out.println("Get the most popular products within a date range");
@@ -97,5 +102,31 @@ public class Menu {
             case 9 -> help();
             default -> System.out.println("No valid selection made.");
         }
+    }
+
+    private Product getProductFromUser() {
+        Product prod = null;
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+                // Get product information
+                System.out.print("Product name: ");
+                String name = scanner.nextLine();
+                System.out.print("Product type: ");
+                String type = scanner.nextLine();
+                System.out.print("Product price: ");
+                float price = Float.parseFloat(scanner.nextLine());
+                System.out.print("How many in inventory? ");
+                int qty_on_hand = Integer.parseInt(scanner.nextLine());
+                System.out.print("Product description: ");
+                String desc = scanner.nextLine();
+                prod = new Product(name, type, price, qty_on_hand, desc);
+                validInput = true;
+            } catch (InputMismatchException e) {
+                System.out.println(e);
+                System.out.println("The data you provided was an incorrect type for the field please try again.");
+            }
+        }
+        return prod;
     }
 }
