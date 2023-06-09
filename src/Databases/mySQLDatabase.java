@@ -1,7 +1,4 @@
 package Databases;
-
-import Models.Product;
-
 import java.sql.*;
 
 public class mySQLDatabase {
@@ -51,31 +48,10 @@ public class mySQLDatabase {
     }
 
     /**
-     * Query the product table for all products that have a quantity on hand > 0.
-     * Print the results to the console.
-     *
-     * @return - ResultSet of all products with qty_on_hand > 0.
+     * Return the connection to this database instance.
+     * @return - Connection
      */
-    public ResultSet getAllProductsInInventory() throws SQLException {
-        String query = "select * from product where qty_on_hand > 0";
-        PreparedStatement prepStmt = con.prepareStatement(query);
-        return prepStmt.executeQuery();
-    }
-
-    /**
-     * Insert row into product table. Returns the number of rows added.
-     * @param prod - Models.Product
-     * @return - int for number of rows added.
-     * @throws SQLException - Error on insert.
-     */
-    public int insertProduct(Product prod) throws SQLException {
-        String query = "insert into product (name, type, price, qty_on_hand, description) values (?, ?, ?, ?, ?)";
-        PreparedStatement prepStmt = con.prepareStatement(query);
-        prepStmt.setString(1, prod.getName());
-        prepStmt.setString(2, prod.getType());
-        prepStmt.setFloat(3, prod.getPrice());
-        prepStmt.setInt(4, prod.getQty_on_hand());
-        prepStmt.setString(5, prod.getDescription());
-        return prepStmt.executeUpdate();
+    public Connection getConnection() {
+        return con;
     }
 }
