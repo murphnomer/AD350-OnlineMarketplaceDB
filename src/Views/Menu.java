@@ -1,3 +1,10 @@
+package Views;
+
+import Controllers.mySQLQuery;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Formatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -9,11 +16,7 @@ import java.util.Scanner;
 public class Menu {
     private final Scanner scanner = new Scanner(System.in);
     private final int exitStatus = 0;
-    private final Database db = new Database();
-
-    public Menu() {
-        db.connect();
-    }
+    private final mySQLQuery controller = new mySQLQuery();
 
     private final String[] menuItems = {
             "1) Get all Products in inventory",
@@ -29,6 +32,12 @@ public class Menu {
     };
 
     /**
+     * Constructor for Menu.
+     */
+    public Menu() {
+        controller.initDB();
+    }
+    /**
      * Print a help message.
      */
     public void help() {
@@ -40,11 +49,10 @@ public class Menu {
      */
     public void about() {
         System.out.println("House-of-Fire-Online-Marketplace");
-        System.out.println("---------------------------------");
-        System.out.println("For Professor Kyle Bastien");
-        System.out.println("Written by Derrek Do, Mike Murphy, Jared Scarr, and Petar Spasic");
-        System.out.println();
-        System.out.println("Provided as is with no guarantees. Use at your own risk.");
+        System.out.println("---------------------------------\n");
+        System.out.println("For Professor Kyle Bastien\n");
+        System.out.println("Written by Derrek Do, Mike Murphy, Jared Scarr, and Petar Spasic\n");
+        System.out.println("Provided as is with no guarantees. Use at your own risk.\n");
     }
 
     public void printMainMenu() {
@@ -66,7 +74,7 @@ public class Menu {
             }
         }
         if (selection == exitStatus) {
-            db.close();
+            controller.closeConnection();
             System.out.println("Thank you for using House-of-Fire-Marketplace! See you again soon!\n");
         } else {
             processSelection(selection);
@@ -80,18 +88,22 @@ public class Menu {
      * Route the selection to the appropriate function.
      *
      * @param selection - int represents the user's menu selection.
-     * @return - success of the action.
      */
     private void processSelection(int selection) {
-        // TODO: replace the below print statements with function calls like case 1
+        // TODO: replace the below print statements with function calls like other cases
         System.out.println();
         switch (selection) {
-            case 1 -> db.getAllProductsInInventory();
-            case 2 -> {
-                Product prod = getProductFromUser();
-                if (prod != null) {
-                    db.insertProduct(prod);
+            case 1 -> {
+                try {
+                    ResultSet rs = controller.getProdInInventory();
+                    printProductTableResults(rs);
+                } catch (SQLException e) {
+                    System.out.println("Error processing your request.");
                 }
+            }
+            case 2 -> {
+                int rowsAdded = addNewProduct();
+                System.out.println(rowsAdded + " added.");
             }
             case 3 -> System.out.println("Update inventory of a specific product");
             case 4 -> System.out.println("Delete a product");
@@ -104,29 +116,57 @@ public class Menu {
         }
     }
 
-    private Product getProductFromUser() {
-        Product prod = null;
+    /**
+     * Prompt the user for input for a new Product.
+     * Attempt to insert the new product into the database.
+     * @return - number of rows added
+     */
+    private int addNewProduct() {
+        int rowsAdded = 0;
         boolean validInput = false;
         while (!validInput) {
             try {
                 // Get product information
-                System.out.print("Product name: ");
+                System.out.print("Models.Product name: ");
                 String name = scanner.nextLine();
-                System.out.print("Product type: ");
+                System.out.print("Models.Product type: ");
                 String type = scanner.nextLine();
-                System.out.print("Product price: ");
+                System.out.print("Models.Product price: ");
                 float price = Float.parseFloat(scanner.nextLine());
                 System.out.print("How many in inventory? ");
                 int qty_on_hand = Integer.parseInt(scanner.nextLine());
-                System.out.print("Product description: ");
+                System.out.print("Models.Product description: ");
                 String desc = scanner.nextLine();
-                prod = new Product(name, type, price, qty_on_hand, desc);
+                rowsAdded = controller.insertProduct(name, type, price, qty_on_hand, desc);
                 validInput = true;
             } catch (InputMismatchException e) {
-                System.out.println(e);
                 System.out.println("The data you provided was an incorrect type for the field please try again.");
+            } catch (SQLException e) {
+                System.out.println("Failed to add new product. Please check your inputs and try again.");
             }
         }
-        return prod;
+        return rowsAdded;
+    }
+
+    /**
+     * Prints the results of a query to the product table given a result set from a product table query.
+     * @param rs - ResultSet from a query to the product table.
+     * @throws SQLException - if an error occurs processing the result set.
+     */
+    private void printProductTableResults(ResultSet rs) throws SQLException {
+        Formatter fmt = new Formatter();
+        fmt.format("%1s %15s %25s %20s %15s %15s\n", "product_id", "name", "type", "price", "qty_on_hand", "description");
+
+        while (rs.next()) {
+            fmt.format("%10s %20s %30s %10s %12s %1s\n",
+                    rs.getInt(1), // product_id
+                    rs.getString(2), // name
+                    rs.getString(3), // type
+                    rs.getFloat(5), // price
+                    rs.getInt(6), // qty_on_hand
+                    "       " + rs.getString(4) // description with left padding added
+            );
+        }
+        System.out.println(fmt);
     }
 }

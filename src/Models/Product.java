@@ -1,3 +1,5 @@
+package Models;
+
 public class Product {
     private String name;
     private String type;
