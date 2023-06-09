@@ -127,15 +127,15 @@ public class Menu {
         while (!validInput) {
             try {
                 // Get product information
-                System.out.print("Models.Product name: ");
+                System.out.print("Product name: ");
                 String name = scanner.nextLine();
-                System.out.print("Models.Product type: ");
+                System.out.print("Product type: ");
                 String type = scanner.nextLine();
-                System.out.print("Models.Product price: ");
+                System.out.print("Product price: ");
                 float price = Float.parseFloat(scanner.nextLine());
                 System.out.print("How many in inventory? ");
                 int qty_on_hand = Integer.parseInt(scanner.nextLine());
-                System.out.print("Models.Product description: ");
+                System.out.print("Product description: ");
                 String desc = scanner.nextLine();
                 rowsAdded = controller.insertProduct(name, type, price, qty_on_hand, desc);
                 validInput = true;
