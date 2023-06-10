@@ -107,8 +107,22 @@ public class Menu {
             }
             case 3 -> System.out.println("Update inventory of a specific product");
             case 4 -> System.out.println("Delete a product");
-            case 5 -> System.out.println("Get the most popular products within a date range");
-            case 6 -> System.out.println("Get the least popular products within a date range");
+            case 5 -> {
+                try {
+                    ResultSet rs = controller.mostPopProd();
+                    printMostLeastPopResults(rs);
+                } catch (SQLException e) {
+                    System.out.println("Error processing request");
+                }
+            }
+            case 6 -> {
+                try {
+                    ResultSet rs = controller.leastPopProd();
+                    printMostLeastPopResults(rs);
+                } catch (SQLException e) {
+                    System.out.println("Error processing request");
+                }
+            }
             case 7 -> System.out.println("Get users who have not made a purchase within a date range");
             case 8 -> about();
             case 9 -> help();
@@ -166,6 +180,18 @@ public class Menu {
                     rs.getInt(6), // qty_on_hand
                     "       " + rs.getString(4) // description with left padding added
             );
+        }
+        System.out.println(fmt);
+    }
+
+    private void printMostLeastPopResults(ResultSet rs) throws SQLException {
+        Formatter fmt = new Formatter();
+        fmt.format("%-20s%5s\n", "Name", "Quantity Sold");
+
+        while(rs.next()) {
+            fmt.format("%-20s%1s\n",
+                    rs.getString(1),
+                    rs.getInt(2));
         }
         System.out.println(fmt);
     }
