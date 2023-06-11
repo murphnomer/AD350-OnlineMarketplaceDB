@@ -53,6 +53,9 @@ public class Menu {
         System.out.println("Provided as is with no guarantees. Use at your own risk.\n");
     }
 
+    /**
+     * Prints out the main menu.
+     */
     public void printMainMenu() {
         int selection = -1;
         boolean validInput = false;
@@ -127,7 +130,7 @@ public class Menu {
                 try {
                     int numMonths = intInput();
                     ResultSet userList  = controller.generatePromotionalEmailList(numMonths);
-                    printEmailPromotionList(userList, numMonths);
+                    printEmailPromotionList(userList);
                 } catch (SQLException e) {
                     System.out.println(e);
                 }
@@ -243,7 +246,12 @@ public class Menu {
         System.out.println(fmt);
     }
 
-    private void printEmailPromotionList(ResultSet rs, int numMonths) throws SQLException {
+    /**
+     * Prints out a list of users that haven't purchased anything in a while.
+     * @param rs - resultSet containing the stale users
+     * @throws SQLException
+     */
+    private void printEmailPromotionList(ResultSet rs) throws SQLException {
         ResultSet pl;
         Formatter fmt = new Formatter();
         fmt.format("%-20s%-20s%-40s%-15s%-20s\n","First Name", "Last Name", "Email Address", "Last Purchase","Favorite Products");
