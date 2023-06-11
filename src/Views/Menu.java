@@ -4,9 +4,7 @@ import Controllers.mySQLQuery;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Formatter;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Controller class for the selection menu of the application.
@@ -109,16 +107,16 @@ public class Menu {
             case 4 -> System.out.println("Delete a product");
             case 5 -> {
                 try {
-                    ResultSet rs = controller.mostPopProd();
-                    printMostLeastPopResults(rs);
+                    ResultSet rs = controller.itemsSold(dateInput(), dateInput());
+                    printMostLeastPopResults(rs, true);
                 } catch (SQLException e) {
                     System.out.println("Error processing request");
                 }
             }
             case 6 -> {
                 try {
-                    ResultSet rs = controller.leastPopProd();
-                    printMostLeastPopResults(rs);
+                    ResultSet rs = controller.itemsSold(dateInput(), dateInput());
+                    printMostLeastPopResults(rs, false);
                 } catch (SQLException e) {
                     System.out.println("Error processing request");
                 }
@@ -162,6 +160,13 @@ public class Menu {
         return rowsAdded;
     }
 
+    private String dateInput() {
+        System.out.println("Please enter a date (YYYY-MM-DD)");
+        Scanner input = new Scanner(System.in);
+        String date = input.nextLine();
+        return date;
+    }
+
     /**
      * Prints the results of a query to the product table given a result set from a product table query.
      * @param rs - ResultSet from a query to the product table.
@@ -184,14 +189,42 @@ public class Menu {
         System.out.println(fmt);
     }
 
-    private void printMostLeastPopResults(ResultSet rs) throws SQLException {
+    private void printMostLeastPopResults(ResultSet rs, Boolean isPop) throws SQLException {
         Formatter fmt = new Formatter();
+        int totalSold = 0; //total products sold
+        HashMap<String, Integer> map = new HashMap<>();
         fmt.format("%-20s%5s\n", "Name", "Quantity Sold");
 
+        //map each item and how much it sold
         while(rs.next()) {
-            fmt.format("%-20s%1s\n",
-                    rs.getString(1),
-                    rs.getInt(2));
+            if (!map.containsKey(rs.getString(1))) {
+                totalSold += rs.getInt(2);
+                map.put(rs.getString(1), rs.getInt(2));
+            } else {
+                int curr = map.get(rs.getString(1));
+                totalSold += rs.getInt(2);
+                map.put(rs.getString(1), rs.getInt(2) + curr);
+            }
+        }
+        //average sold for all items
+        int avg = totalSold / map.size();
+
+        if (isPop) {
+            System.out.println("\t\tMost Popular Items\n\t\t------------------");
+        } else {
+            System.out.println("\t\tLeast Popular Items\n\t\t-------------------");
+        }
+
+        Iterator<String> iterator = map.keySet().iterator();
+        while (iterator.hasNext()) {
+            String product = iterator.next();
+            //Popular products will be determined by if they sold more than the average
+            if (isPop && map.get(product) > avg) {
+                fmt.format("%-20s%1s\n", product, map.get(product));
+            //Least popular products will be determined by if they sold less than average
+            } else if (!isPop && map.get(product) < avg) {
+                fmt.format("%-20s%1s\n", product, map.get(product));
+            }
         }
         System.out.println(fmt);
     }

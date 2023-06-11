@@ -58,39 +58,14 @@ public class mySQLQuery {
         return prepStmt.executeUpdate();
     }
 
-    public ResultSet mostPopProd() throws SQLException {
-        String startDate = dateInput();
-        String endDate = dateInput();
+    public ResultSet itemsSold(String startDate, String endDate) throws SQLException {
         String query =  "SELECT name, quantity " +
                         "FROM transaction " +
                         "INNER JOIN product " +
                         "ON transaction.product_Id = product.product_id " +
-                        "WHERE (purchase_date BETWEEN '" + startDate + "'  AND '" + endDate  +
-                        "') AND quantity >= 15";
+                        "WHERE (purchase_date BETWEEN '" + startDate + "'  AND '" + endDate  + "')";
         PreparedStatement prepStmt = conn.prepareStatement(query);
-        System.out.println("\t\tMost Popular Items\n\t\t-------------------");
         return prepStmt.executeQuery();
-    }
-
-    public ResultSet leastPopProd() throws SQLException {
-        String startDate = dateInput();
-        String endDate = dateInput();
-        String query =  "SELECT name, quantity " +
-                        "FROM transaction " +
-                        "INNER JOIN product " +
-                        "ON transaction.product_Id = product.product_id " +
-                        "WHERE (purchase_date BETWEEN '" + startDate + "'  AND '" + endDate  +
-                        "') AND quantity <= 10";
-        PreparedStatement prepStmt = conn.prepareStatement(query);
-        System.out.println("\t\tLeast Popular Items\n\t\t-------------------");
-        return prepStmt.executeQuery();
-    }
-
-    private String dateInput() {
-        System.out.println("Please enter a date (YYYY-MM-DD)");
-        Scanner input = new Scanner(System.in);
-        String date = input.nextLine();
-        return date;
     }
 
     /**
