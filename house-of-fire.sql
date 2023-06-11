@@ -44,7 +44,7 @@ CREATE TABLE `transaction` (
   `quantity` int NOT NULL,
   `user_id` int DEFAULT NULL,
   PRIMARY KEY (`transaction_id`),
-  CONSTRAINT `transaction_product_id` FOREIGN KEY (`product_Id`) REFERENCES `product` (`product_id`),
+  CONSTRAINT `transaction_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
   CONSTRAINT `transaction_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
 
