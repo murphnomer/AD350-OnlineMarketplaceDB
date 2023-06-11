@@ -91,6 +91,12 @@ public class mySQLQuery {
         return prepStmt.executeQuery();
     }
 
+    /**
+     * Generates a list of users that haven't made a purchase in a specified number of months.
+     * @param monthsSinceLastPurchase - number of months specified by the user.
+     * @return - resultSet with the list of products.
+     * @throws SQLException
+     */
     public ResultSet generatePromotionalEmailList(int monthsSinceLastPurchase) throws SQLException {
         String query = "SELECT user.user_id as user_id, first_name, last_name, email, " +
                 "MAX(purchase_date) as last_purchase_date " +
@@ -102,6 +108,12 @@ public class mySQLQuery {
         return prep.executeQuery();
     }
 
+    /**
+     * Queries the database for a list of products purchased by a particular user.
+     * @param userID - the user ID to search for
+     * @return - resultSet containing the list of commonly ordered products
+     * @throws SQLException
+     */
     public ResultSet getCommonPurchasesForUser(int userID) throws SQLException {
         String query = "SELECT transaction.product_id as product_id, product.name as product_name, " +
                 "COUNT(*) as purchase_count, DATE(MAX(purchase_date)) as last_purchase_date " +
