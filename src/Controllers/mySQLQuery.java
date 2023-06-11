@@ -74,7 +74,7 @@ public class mySQLQuery {
                 "from (" +
                 "select t.product_Id, prod.name, sum(t.quantity) as total, count(t.product_Id) as trans_count from transaction as t " +
                 "inner join product as prod on t.product_Id = prod.product_id " +
-                "        where t.purchase_date between '" + startDate + "' and '" + endDate + "' " +
+                "where t.purchase_date between '" + startDate + "' and '" + endDate + "' " +
                 "group by t.product_Id " +
                 ") as totals " +
                 ") as pop " +
