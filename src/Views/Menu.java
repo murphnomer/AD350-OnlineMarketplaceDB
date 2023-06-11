@@ -107,7 +107,7 @@ public class Menu {
             case 4 -> System.out.println("Delete a product");
             case 5 -> {
                 try {
-                    ResultSet rs = controller.itemsSold(dateInput(), dateInput());
+                    ResultSet rs = controller.itemsSold(dateInput(true), dateInput(false), true);
                     printMostLeastPopResults(rs, true);
                 } catch (SQLException e) {
                     System.out.println("Error processing request");
@@ -115,7 +115,7 @@ public class Menu {
             }
             case 6 -> {
                 try {
-                    ResultSet rs = controller.itemsSold(dateInput(), dateInput());
+                    ResultSet rs = controller.itemsSold(dateInput(true), dateInput(false), false);
                     printMostLeastPopResults(rs, false);
                 } catch (SQLException e) {
                     System.out.println("Error processing request");
@@ -160,11 +160,16 @@ public class Menu {
         return rowsAdded;
     }
 
-    private String dateInput() {
-        System.out.println("Please enter a date (YYYY-MM-DD)");
+    /**
+     * Prompt the user for a date input in the provided format.
+     * @param start - boolean to tell which date to prompt the user for.
+     * @return - user input.
+     */
+    private String dateInput(boolean start) {
+        String dateType = start ? "start" : "end";
+        System.out.println("Please enter a " + dateType + " date (YYYY-MM-DD)");
         Scanner input = new Scanner(System.in);
-        String date = input.nextLine();
-        return date;
+        return input.nextLine();
     }
 
     /**
@@ -189,25 +194,15 @@ public class Menu {
         System.out.println(fmt);
     }
 
+    /**
+     * Print either the most popular or least popular products in a given time range.
+     * @param rs - resultSet.
+     * @param isPop - boolean > if isPop us true else <.
+     * @throws SQLException - error processing sql statement.
+     */
     private void printMostLeastPopResults(ResultSet rs, Boolean isPop) throws SQLException {
         Formatter fmt = new Formatter();
-        int totalSold = 0; //total products sold
-        HashMap<String, Integer> map = new HashMap<>();
         fmt.format("%-20s%5s\n", "Name", "Quantity Sold");
-
-        //map each item and how much it sold
-        while(rs.next()) {
-            if (!map.containsKey(rs.getString(1))) {
-                totalSold += rs.getInt(2);
-                map.put(rs.getString(1), rs.getInt(2));
-            } else {
-                int curr = map.get(rs.getString(1));
-                totalSold += rs.getInt(2);
-                map.put(rs.getString(1), rs.getInt(2) + curr);
-            }
-        }
-        //average sold for all items
-        int avg = totalSold / map.size();
 
         if (isPop) {
             System.out.println("\t\tMost Popular Items\n\t\t------------------");
@@ -215,17 +210,10 @@ public class Menu {
             System.out.println("\t\tLeast Popular Items\n\t\t-------------------");
         }
 
-        Iterator<String> iterator = map.keySet().iterator();
-        while (iterator.hasNext()) {
-            String product = iterator.next();
-            //Popular products will be determined by if they sold more than the average
-            if (isPop && map.get(product) > avg) {
-                fmt.format("%-20s%1s\n", product, map.get(product));
-            //Least popular products will be determined by if they sold less than average
-            } else if (!isPop && map.get(product) < avg) {
-                fmt.format("%-20s%1s\n", product, map.get(product));
-            }
+        while(rs.next()) {
+            fmt.format("%-20s%1s\n", rs.getString(2), rs.getInt(3));
         }
+
         System.out.println(fmt);
     }
 }

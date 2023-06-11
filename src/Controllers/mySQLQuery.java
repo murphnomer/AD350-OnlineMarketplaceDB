@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 
 public class mySQLQuery {
@@ -58,12 +57,36 @@ public class mySQLQuery {
         return prepStmt.executeUpdate();
     }
 
-    public ResultSet itemsSold(String startDate, String endDate) throws SQLException {
-        String query =  "SELECT name, quantity " +
-                        "FROM transaction " +
-                        "INNER JOIN product " +
-                        "ON transaction.product_Id = product.product_id " +
-                        "WHERE (purchase_date BETWEEN '" + startDate + "'  AND '" + endDate  + "')";
+    /**
+     *
+     * @param startDate - beginning of date range.
+     * @param endDate - end of date range.
+     * @param isPop - boolean to check if the query should be for most popular (true) or least (false).
+     * @return - ResultSet.
+     * @throws SQLException - error processing sql query.
+     */
+    public ResultSet itemsSold(String startDate, String endDate, boolean isPop) throws SQLException {
+        String comparator = isPop ? ">" : "<";
+        System.out.println(comparator);
+        String query = "select pop.product_id, pop.name, pop.total, pop.trans_count " +
+                "from (" +
+                "select totals.product_id, totals.name, total, trans_count " +
+                "from (" +
+                "select t.product_id, prod.name, sum(t.quantity) as total, count(t.product_id) as trans_count from transaction as t " +
+                "inner join product as prod on t.product_id = prod.product_id " +
+                "where t.purchase_date between '" + startDate + "' and '" + endDate + "' " +
+                "group by t.product_id " +
+                ") as totals " +
+                ") as pop " +
+                "where pop.total " + comparator + " ( " +
+                "select avg(range_avg.total) as total_avg " +
+                "from ( " +
+                "select sum(quantity) total " +
+                "from transaction as t " +
+                "where t.purchase_date between '" + startDate + "' and '" + endDate + "' " +
+                "group by t.product_id " +
+                ") as range_avg " +
+                ");";
         PreparedStatement prepStmt = conn.prepareStatement(query);
         return prepStmt.executeQuery();
     }
