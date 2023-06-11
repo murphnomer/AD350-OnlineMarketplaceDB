@@ -91,6 +91,28 @@ public class mySQLQuery {
         return prepStmt.executeQuery();
     }
 
+    public ResultSet generatePromotionalEmailList(int monthsSinceLastPurchase) throws SQLException {
+        String query = "SELECT user.user_id as user_id, first_name, last_name, email, " +
+                "MAX(purchase_date) as last_purchase_date " +
+                "FROM transaction INNER JOIN user ON transaction.user_id = user.user_id " +
+                "GROUP BY user_id, first_name, last_name, email " +
+                "HAVING MAX(purchase_date) < DATE_ADD(NOW(), INTERVAL ? MONTH)";
+        PreparedStatement prep = conn.prepareStatement(query);
+        prep.setInt(1, monthsSinceLastPurchase * -1);
+        return prep.executeQuery();
+    }
+
+    public ResultSet getCommonPurchasesForUser(int userID) throws SQLException {
+        String query = "SELECT transaction.product_id as product_id, product.name as product_name, " +
+                "COUNT(*) as purchase_count, DATE(MAX(purchase_date)) as last_purchase_date " +
+                "FROM transaction INNER JOIN product ON transaction.product_id = product.product_id " +
+                "WHERE user_id = ? " +
+                "GROUP BY product_id, product_name";
+        PreparedStatement prep = conn.prepareStatement(query);
+        prep.setInt(1, userID);
+        return prep.executeQuery();
+    }
+
     /**
      * Close the connection.
      */
