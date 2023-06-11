@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 
 public class mySQLQuery {
@@ -55,6 +56,16 @@ public class mySQLQuery {
         prepStmt.setInt(4, prod.getQty_on_hand());
         prepStmt.setString(5, prod.getDescription());
         return prepStmt.executeUpdate();
+    }
+
+    public ResultSet itemsSold(String startDate, String endDate) throws SQLException {
+        String query =  "SELECT name, quantity " +
+                        "FROM transaction " +
+                        "INNER JOIN product " +
+                        "ON transaction.product_Id = product.product_id " +
+                        "WHERE (purchase_date BETWEEN '" + startDate + "'  AND '" + endDate  + "')";
+        PreparedStatement prepStmt = conn.prepareStatement(query);
+        return prepStmt.executeQuery();
     }
 
     /**
