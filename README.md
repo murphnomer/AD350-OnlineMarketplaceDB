@@ -15,6 +15,8 @@ Contributors:
 
 - Run the provided sql script in your preferred mySQL GUI to get a database with dummy data loaded.
 
+![Normalized Database Diagram](images/Acme%20Online%20Marketplace%20ER%20Diagram.svg)
+
 ### IntelliJ
 If you use a different code editor your steps may be different, but he concepts are the same.
 

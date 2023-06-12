@@ -1,6 +1,7 @@
 package Views;
 
 import Controllers.mySQLQuery;
+import Models.Product;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,9 +18,9 @@ public class Menu {
     private final mySQLQuery controller = new mySQLQuery();
 
     private final String[] menuItems = {
-            "1) Get all products in inventory",
+            "1) Get a list of products",
             "2) Create a new product",
-            "3) Update the inventory of a specific product",
+            "3) Update on-hand quantity of a specific product",
             "4) Delete a product",
             "5) Get the most popular products within a date range",
             "6) Get the least popular products within a date range",
@@ -155,24 +156,35 @@ public class Menu {
         switch (selection) {
             case 1 -> {
                 try {
-                    ResultSet rs = controller.getProdInInventory();
+                    int minQty = intInput("Enter 0 to list all products or 1 to only list those currently"+
+                            " in stock: ");
+                    ResultSet rs = controller.getProdInInventory(minQty);
                     printProductTableResults(rs);
                 } catch (SQLException e) {
-                    System.out.println("Error processing your request.");
+                    System.out.println(e);
                 }
             }
             case 2 -> {
                 int rowsAdded = addNewProduct();
                 System.out.println(rowsAdded + " added.");
             }
-            case 3 -> System.out.println("Update inventory of a specific product");
+            case 3 -> {
+                try {
+                    Product product = controller.getProductById(intInput("Enter id of product to update: "));
+                    int newQty = intInput("Enter new stock quantity for " + product.getName() +" (Current qty " + product.getQty_on_hand() + "): ");
+                    int result = controller.updateStockQuantity(product.getId(), newQty);
+                    System.out.println(result > 0 ? "Quantity updated successfully!" : "Product not found!");
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
+            }
             case 4 -> System.out.println("Delete a product");
             case 5 -> {
                 try {
                     ResultSet rs = controller.itemsSold(dateInput(true), dateInput(false), true);
                     printMostLeastPopResults(rs, true);
                 } catch (SQLException e) {
-                    System.out.println("Error processing request");
+                    System.out.println(e);
                 }
             }
             case 6 -> {
@@ -180,16 +192,16 @@ public class Menu {
                     ResultSet rs = controller.itemsSold(dateInput(true), dateInput(false), false);
                     printMostLeastPopResults(rs, false);
                 } catch (SQLException e) {
-                    System.out.println("Error processing request");
+                    System.out.println(e);
                 }
             }
             case 7 -> {
                 try {
-                    int numMonths = intInput();
-                    ResultSet userList = controller.generatePromotionalEmailList(numMonths);
+                    int numMonths = intInput("Enter number of months since last purchase: ");
+                    ResultSet userList  = controller.generatePromotionalEmailList(numMonths);
                     printEmailPromotionList(userList);
                 } catch (SQLException e) {
-                    System.out.println("Error processing request");
+                    System.out.println(e);
                 }
             }
             case 8 -> about();
@@ -249,9 +261,10 @@ public class Menu {
      *
      * @return - user input
      */
-    private int intInput() {
-        System.out.print("Enter number of months since last purchase: ");
-        String num = scanner.nextLine();
+    private int intInput(String message) {
+        System.out.print(message);
+        Scanner input = new Scanner(System.in);
+        String num = input.nextLine();
         while (!num.matches("^\\d+$")) {
             num = scanner.nextLine();
         }
