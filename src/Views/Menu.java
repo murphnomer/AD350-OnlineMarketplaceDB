@@ -18,7 +18,7 @@ public class Menu {
     private final mySQLQuery controller = new mySQLQuery();
 
     private final String[] menuItems = {
-            "1) Get a list of all products",
+            "1) Get a list of products",
             "2) Create a new product",
             "3) Update on-hand quantity of a specific product",
             "4) Delete a product",
@@ -99,10 +99,12 @@ public class Menu {
         switch (selection) {
             case 1 -> {
                 try {
-                    ResultSet rs = controller.getProdInInventory();
+                    int minQty = intInput("Enter 0 to list all products or 1 to only list those currently"+
+                            " in stock: ");
+                    ResultSet rs = controller.getProdInInventory(minQty);
                     printProductTableResults(rs);
                 } catch (SQLException e) {
-                    System.out.println("Error processing your request.");
+                    System.out.println(e);
                 }
             }
             case 2 -> {
@@ -125,7 +127,7 @@ public class Menu {
                     ResultSet rs = controller.itemsSold(dateInput(true), dateInput(false), true);
                     printMostLeastPopResults(rs, true);
                 } catch (SQLException e) {
-                    System.out.println("Error processing request");
+                    System.out.println(e);
                 }
             }
             case 6 -> {
@@ -133,7 +135,7 @@ public class Menu {
                     ResultSet rs = controller.itemsSold(dateInput(true), dateInput(false), false);
                     printMostLeastPopResults(rs, false);
                 } catch (SQLException e) {
-                    System.out.println("Error processing request");
+                    System.out.println(e);
                 }
             }
             case 7 -> {

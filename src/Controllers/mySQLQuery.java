@@ -29,9 +29,10 @@ public class mySQLQuery {
      *
      * @return - ResultSet of all products with qty_on_hand > 0.
      */
-    public ResultSet getProdInInventory() throws SQLException {
-        String query = "select * from product";
+    public ResultSet getProdInInventory(int minQty) throws SQLException {
+        String query = "select * from product where qty_on_hand >= ?";
         PreparedStatement prepStmt = conn.prepareStatement(query);
+        prepStmt.setInt(1, minQty);
         return prepStmt.executeQuery();
     }
 
@@ -61,7 +62,7 @@ public class mySQLQuery {
      * @throws SQLException - If an error occurs on insert.
      */
     public int insertProduct(String name, String type, float price, int qty_on_hand, String description) throws SQLException {
-        Product prod = new Product(-1, name, type, price, qty_on_hand, description);
+        Product prod = new Product(name, type, price, qty_on_hand, description);
         String query = "insert into product (name, type, price, qty_on_hand, description) values (?, ?, ?, ?, ?)";
         PreparedStatement prepStmt = conn.prepareStatement(query);
         prepStmt.setString(1, prod.getName());
