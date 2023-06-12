@@ -30,9 +30,24 @@ public class mySQLQuery {
      * @return - ResultSet of all products with qty_on_hand > 0.
      */
     public ResultSet getProdInInventory() throws SQLException {
-        String query = "select * from product where qty_on_hand > 0";
+        String query = "select * from product";
         PreparedStatement prepStmt = conn.prepareStatement(query);
         return prepStmt.executeQuery();
+    }
+
+    /**
+     * Gets a specific product from the database and returns it as a Product object.
+     * @param id - product_id of the product to retrieve.
+     * @return - the Product object
+     * @throws SQLException
+     */
+    public Product getProductById(int id) throws SQLException{
+        String query = "SELECT product_id, name, type, price, qty_on_hand, description FROM product WHERE product_id = ?";
+        PreparedStatement prep = conn.prepareStatement(query);
+        prep.setInt(1, id);
+        ResultSet rs = prep.executeQuery();
+        rs.next();
+        return new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getFloat(4), rs.getInt(5), rs.getString(6));
     }
 
     /**
@@ -46,7 +61,7 @@ public class mySQLQuery {
      * @throws SQLException - If an error occurs on insert.
      */
     public int insertProduct(String name, String type, float price, int qty_on_hand, String description) throws SQLException {
-        Product prod = new Product(name, type, price, qty_on_hand, description);
+        Product prod = new Product(-1, name, type, price, qty_on_hand, description);
         String query = "insert into product (name, type, price, qty_on_hand, description) values (?, ?, ?, ?, ?)";
         PreparedStatement prepStmt = conn.prepareStatement(query);
         prepStmt.setString(1, prod.getName());
@@ -123,6 +138,23 @@ public class mySQLQuery {
         PreparedStatement prep = conn.prepareStatement(query);
         prep.setInt(1, userID);
         return prep.executeQuery();
+    }
+
+    /**
+     * Updates the on-hand quantity of a product in the database.
+     * @param product_id - the id of the product to update.
+     * @param newQty - the updated quantity.
+     * @return - the number of rows that were updated.  Should be 1 if successful, 0 if not.
+     * @throws SQLException
+     */
+    public int updateStockQuantity(int product_id, int newQty) throws SQLException {
+        String query = "UPDATE product " +
+                "SET qty_on_hand = ? " +
+                "WHERE product_id = ?";
+        PreparedStatement prep = conn.prepareStatement(query);
+        prep.setInt(1, newQty);
+        prep.setInt(2, product_id);
+        return prep.executeUpdate();
     }
 
     /**
