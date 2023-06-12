@@ -17,9 +17,9 @@ public class Menu {
     private final mySQLQuery controller = new mySQLQuery();
 
     private final String[] menuItems = {
-            "1) Get all Products in inventory",
+            "1) Get all products in inventory",
             "2) Create a new product",
-            "3) Update inventory of a specific product",
+            "3) Update the inventory of a specific product",
             "4) Delete a product",
             "5) Get the most popular products within a date range",
             "6) Get the least popular products within a date range",
@@ -35,11 +35,68 @@ public class Menu {
     public Menu() {
         controller.initDB();
     }
+
     /**
      * Print a help message.
      */
     public void help() {
+        System.out.println("The main menu will have a list of numbered options");
+        System.out.println("To select an option enter the number next to the description of what you want to accomplish.");
+        System.out.println("Your selection must be a number and it must be one of the available menu options.\n");
+        System.out.println("---------------------------------\n");
+        System.out.println("Further help is available for the specific menu options below.");
+        System.out.println("Select one or press any other key to move on.\n");
 
+        for (String menuOption : Arrays.copyOfRange(menuItems, 0, 7)) {
+            System.out.println(menuOption);
+        }
+        String input = scanner.nextLine();
+        int intInput = 0;
+        try {
+            intInput = Integer.parseInt(input);
+        } catch (InputMismatchException | NumberFormatException e) {
+            System.out.println("What you entered was not a number.");
+        }
+
+        switch (intInput) {
+            case 1 -> {
+                System.out.println(menuItems[intInput - 1]);
+                System.out.println("\tDisplays a table of every product that has a quantity on hand greater than 0.");
+            }
+            case 2 -> {
+                System.out.println(menuItems[intInput - 1]);
+                System.out.println("\tWill prompt you to add each field required to create a new product line by line.");
+            }
+            case 3 -> {
+                System.out.println(menuItems[intInput - 1]);
+                System.out.println("\tWill prompt you to update the current inventory of a product.");
+                System.out.println("\tThe value will over write what is currently there and not add to it.");
+                System.out.println("\t"); // TODO: what does the user need in order to do this?
+            }
+            case 4 -> {
+                System.out.println(menuItems[intInput - 1]);
+                System.out.println("\tDelete the product by providing ?"); // TODO: what does the user require to do this?
+            }
+            case 5 -> {
+                System.out.println(menuItems[intInput - 1]);
+                System.out.println("\tYou are prompted for start and end dates that must be in the format Year-Month-Day");
+                System.out.println("\t(YYYY-MM-DD) for example 2021-01-01 or 2021-12-25");
+                System.out.println("\tThe result is a table of the most popular items in the given date range.");
+            }
+            case 6 -> {
+                System.out.println(menuItems[intInput - 1]);
+                System.out.println("\tYou are prompted for start and end dates that must be in the format Year-Month-Day");
+                System.out.println("\t(YYYY-MM-DD) for example 2021-01-01 or 2021-12-25");
+                System.out.println("\tThe result is a table of the least popular items in the given date range.");
+            }
+            case 7 -> {
+                System.out.println(menuItems[intInput - 1]);
+                System.out.println("\tExpects you to enter an integer (1 - 12) representing a month of the year.");
+                System.out.println("\tDisplays a list of customers that have not ordered in the selected number of months.");
+            }
+            default -> System.out.println();
+        }
+        ;
     }
 
     /**
@@ -70,9 +127,7 @@ public class Menu {
             try {
                 selection = Integer.parseInt(scanner.nextLine());
                 validInput = true;
-            } catch (InputMismatchException e) {
-                System.out.println("What you entered was not a number.");
-            } catch (NumberFormatException e) {
+            } catch (InputMismatchException | NumberFormatException e) {
                 System.out.println("What you entered was not a number.");
             }
         }
@@ -129,10 +184,10 @@ public class Menu {
             case 7 -> {
                 try {
                     int numMonths = intInput();
-                    ResultSet userList  = controller.generatePromotionalEmailList(numMonths);
+                    ResultSet userList = controller.generatePromotionalEmailList(numMonths);
                     printEmailPromotionList(userList);
                 } catch (SQLException e) {
-                    System.out.println(e);
+                    System.out.println("Error processing request");
                 }
             }
             case 8 -> about();
@@ -144,6 +199,7 @@ public class Menu {
     /**
      * Prompt the user for input for a new Product.
      * Attempt to insert the new product into the database.
+     *
      * @return - number of rows added
      */
     private int addNewProduct() {
@@ -175,27 +231,27 @@ public class Menu {
 
     /**
      * Prompt the user for a date input in the provided format.
+     *
      * @param start - boolean to tell which date to prompt the user for.
      * @return - user input.
      */
     private String dateInput(boolean start) {
         String dateType = start ? "start" : "end";
         System.out.println("Please enter a " + dateType + " date (YYYY-MM-DD)");
-        Scanner input = new Scanner(System.in);
-        return input.nextLine();
+        return scanner.nextLine();
     }
 
     /**
      * Prompt the user for an integer number of months since last purchase to consider the user for the email
      * promotion list.
+     *
      * @return - user input
      */
     private int intInput() {
         System.out.print("Enter number of months since last purchase: ");
-        Scanner input = new Scanner(System.in);
-        String num = input.nextLine();
+        String num = scanner.nextLine();
         while (!num.matches("^\\d+$")) {
-            num = input.nextLine();
+            num = scanner.nextLine();
         }
         return Integer.parseInt(num);
 
@@ -203,6 +259,7 @@ public class Menu {
 
     /**
      * Prints the results of a query to the product table given a result set from a product table query.
+     *
      * @param rs - ResultSet from a query to the product table.
      * @throws SQLException - if an error occurs processing the result set.
      */
@@ -225,7 +282,8 @@ public class Menu {
 
     /**
      * Print either the most popular or least popular products in a given time range.
-     * @param rs - resultSet.
+     *
+     * @param rs    - resultSet.
      * @param isPop - boolean > if isPop us true else <.
      * @throws SQLException - error processing sql statement.
      */
@@ -239,7 +297,7 @@ public class Menu {
             System.out.println("\t\tLeast Popular Items\n\t\t-------------------");
         }
 
-        while(rs.next()) {
+        while (rs.next()) {
             fmt.format("%-20s%1s\n", rs.getString(2), rs.getInt(3));
         }
 
@@ -248,20 +306,21 @@ public class Menu {
 
     /**
      * Prints out a list of users that haven't purchased anything in a while.
+     *
      * @param rs - resultSet containing the stale users
      * @throws SQLException
      */
     private void printEmailPromotionList(ResultSet rs) throws SQLException {
         ResultSet pl;
         Formatter fmt = new Formatter();
-        fmt.format("%-20s%-20s%-40s%-15s%-20s\n","First Name", "Last Name", "Email Address", "Last Purchase","Favorite Products");
+        fmt.format("%-20s%-20s%-40s%-15s%-20s\n", "First Name", "Last Name", "Email Address", "Last Purchase", "Favorite Products");
         System.out.println("Promotional Email List");
         while (rs.next()) {
             pl = controller.getCommonPurchasesForUser(rs.getInt(1));
             pl.next();
             fmt.format("%-20s%-20s%-40s%-15tF%-20s\n", rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5), pl.getString(2));
-            while(pl.next()) {
-                fmt.format("%-95s%-20s\n","",pl.getString(2));
+            while (pl.next()) {
+                fmt.format("%-95s%-20s\n", "", pl.getString(2));
             }
         }
 
