@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Controller class for the selection menu of the application.
  *
- * @author Jared Scarr
+ * @author Jared Scarr, Derrek Do, Mike Murphy, and Petar Spasic
  */
 public class Menu {
     private final Scanner scanner = new Scanner(System.in);
@@ -61,7 +61,9 @@ public class Menu {
         switch (intInput) {
             case 1 -> {
                 System.out.println(menuItems[intInput - 1]);
-                System.out.println("\tDisplays a table of every product that has a quantity on hand greater than 0.");
+                System.out.println("\tDisplays a table of products.");
+                System.out.println("\tA second prompt will give the option to see all products or just products\n");
+                System.out.println("\tthat are on hand (0 or 1).");
             }
             case 2 -> {
                 System.out.println(menuItems[intInput - 1]);
@@ -71,11 +73,11 @@ public class Menu {
                 System.out.println(menuItems[intInput - 1]);
                 System.out.println("\tWill prompt you to update the current inventory of a product.");
                 System.out.println("\tThe value will over write what is currently there and not add to it.");
-                System.out.println("\t"); // TODO: what does the user need in order to do this?
+                System.out.println("\tThe id of the product is required to complete this product.");
             }
             case 4 -> {
                 System.out.println(menuItems[intInput - 1]);
-                System.out.println("\tDelete the product by providing ?"); // TODO: what does the user require to do this?
+                System.out.println("\tDelete a product. The id of the product is required.");
             }
             case 5 -> {
                 System.out.println(menuItems[intInput - 1]);
