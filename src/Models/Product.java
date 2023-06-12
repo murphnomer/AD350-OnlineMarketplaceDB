@@ -1,6 +1,7 @@
 package Models;
 
 public class Product {
+    private int id = -1;
     private String name;
     private String type;
     private float price;
@@ -13,6 +14,23 @@ public class Product {
         this.price = price;
         this.qty_on_hand = qty_on_hand;
         this.description = description;
+    }
+
+    public Product(int id, String name, String type, float price, int qty_on_hand, String description) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.price = price;
+        this.qty_on_hand = qty_on_hand;
+        this.description = description;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
