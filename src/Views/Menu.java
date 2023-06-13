@@ -5,6 +5,7 @@ import Models.Product;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.*;
 
 /**
@@ -171,6 +172,7 @@ public class Menu {
             case 3 -> {
                 try {
                     Product product = controller.getProductById(intInput("Enter id of product to update: "));
+                    printProductDetailPage(product.getId());
                     int newQty = intInput("Enter new stock quantity for " + product.getName() +" (Current qty " + product.getQty_on_hand() + "): ");
                     int result = controller.updateStockQuantity(product.getId(), newQty);
                     System.out.println(result > 0 ? "Quantity updated successfully!" : "Product not found!");
@@ -317,6 +319,54 @@ public class Menu {
         }
 
         System.out.println(fmt);
+    }
+
+    /**
+     * Utility function to insert line breaks for long lines.
+     * @param string - the string to wrap
+     * @param lineWidth - approximate max number of characters per line
+     * @return - the string with line breaks inserted
+     */
+    private String wrap(String string, int lineWidth) {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        for (String s : string.split(" ")) {
+            sb.append(s + (s.length() + count > lineWidth ? "\n" : " "));
+            count = count + s.length() > lineWidth ? 0 : count + s.length() + 1;
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Prints out a detail page with stats about the product.
+     * @param productId - the product of interest
+     * @throws SQLException
+     */
+    private void printProductDetailPage(int productId) throws SQLException {
+        Product product = controller.getProductById(productId);
+        ResultSet reviews = controller.getReviewsForProduct(productId);
+        ResultSet productStats = controller.getProductStats(productId);
+        productStats.next();
+        System.out.println(product.getName());
+        System.out.println(product.getType());
+        System.out.println("Unique purchasers: " + productStats.getInt(2) + "\t\t" +
+                "Total sales: " + NumberFormat.getCurrencyInstance().format(productStats.getFloat(3)));
+        System.out.println("-------------------------");
+        System.out.println("Product description:");
+        System.out.println();
+        System.out.println(wrap(product.getDescription(),100));
+        System.out.println();
+        System.out.println();
+        System.out.println("Average rating: " + productStats.getFloat(1) + " / 5 stars");
+        System.out.println();
+        System.out.println("Reviews:");
+        System.out.println();
+        while (reviews.next()) {
+            System.out.println(wrap("\"" + reviews.getString(5) + "\" ", 100));
+            System.out.println(reviews.getInt(3) + " stars - " + reviews.getString(2) +
+                    " from " + reviews.getString(4));
+            System.out.println();
+        }
     }
 
     /**
