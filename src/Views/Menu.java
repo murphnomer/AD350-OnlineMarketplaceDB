@@ -152,63 +152,46 @@ public class Menu {
      * @param selection - int represents the user's menu selection.
      */
     private void processSelection(int selection) {
-        // TODO: replace the below print statements with function calls like other cases
         System.out.println();
-        switch (selection) {
-            case 1 -> {
-                try {
-                    int minQty = intInput("Enter 0 to list all products or 1 to only list those currently"+
+        try {
+            switch (selection) {
+                case 1 -> {
+                    int minQty = intInput("Enter 0 to list all products or 1 to only list those currently" +
                             " in stock: ");
                     ResultSet rs = controller.getProdInInventory(minQty);
                     printProductTableResults(rs);
-                } catch (SQLException e) {
-                    System.out.println(e);
                 }
-            }
-            case 2 -> {
-                int rowsAdded = addNewProduct();
-                System.out.println(rowsAdded + " added.");
-            }
-            case 3 -> {
-                try {
+                case 2 -> {
+                    int rowsAdded = addNewProduct();
+                    System.out.println(rowsAdded + " added.");
+                }
+                case 3 -> {
                     Product product = controller.getProductById(intInput("Enter id of product to update: "));
                     printProductDetailPage(product.getId());
-                    int newQty = intInput("Enter new stock quantity for " + product.getName() +" (Current qty " + product.getQty_on_hand() + "): ");
+                    int newQty = intInput("Enter new stock quantity for " + product.getName() + " (Current qty " + product.getQty_on_hand() + "): ");
                     int result = controller.updateStockQuantity(product.getId(), newQty);
                     System.out.println(result > 0 ? "Quantity updated successfully!" : "Product not found!");
-                } catch (SQLException e) {
-                    System.out.println(e);
                 }
-            }
-            case 4 -> System.out.println("Delete a product");
-            case 5 -> {
-                try {
+                case 4 -> System.out.println("Delete a product");
+                case 5 -> {
                     ResultSet rs = controller.itemsSold(dateInput(true), dateInput(false), true);
                     printMostLeastPopResults(rs, true);
-                } catch (SQLException e) {
-                    System.out.println(e);
                 }
-            }
-            case 6 -> {
-                try {
+                case 6 -> {
                     ResultSet rs = controller.itemsSold(dateInput(true), dateInput(false), false);
                     printMostLeastPopResults(rs, false);
-                } catch (SQLException e) {
-                    System.out.println(e);
                 }
-            }
-            case 7 -> {
-                try {
+                case 7 -> {
                     int numMonths = intInput("Enter number of months since last purchase: ");
-                    ResultSet userList  = controller.generatePromotionalEmailList(numMonths);
+                    ResultSet userList = controller.generatePromotionalEmailList(numMonths);
                     printEmailPromotionList(userList);
-                } catch (SQLException e) {
-                    System.out.println(e);
                 }
+                case 8 -> about();
+                case 9 -> help();
+                default -> System.out.println("No valid selection made.");
             }
-            case 8 -> about();
-            case 9 -> help();
-            default -> System.out.println("No valid selection made.");
+        } catch (SQLException e) {
+            System.out.println(e);
         }
     }
 
