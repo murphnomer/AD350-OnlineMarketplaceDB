@@ -159,6 +159,40 @@ public class mySQLQuery {
     }
 
     /**
+     * Gets the list of reviews for a particular product.
+     * @param productId - the product of interest.
+     * @return - ResultSet containing data from the review table.
+     * @throws SQLException
+     */
+    public ResultSet getReviewsForProduct(int productId) throws SQLException {
+        String reviewQuery = "SELECT review_date, first_name, rating, state, review_text " +
+                "FROM review INNER JOIN user ON review.user_id = user.user_id " +
+                "WHERE product_id = ?";
+        PreparedStatement prep = conn.prepareStatement(reviewQuery);
+        prep.setInt(1, productId);
+        return prep.executeQuery();
+    }
+
+    /**
+     * Calculates some statistics about a particular product.
+     * @param productId - the product of interest.
+     * @return - ResultSet containing some numerical statistics.
+     * @throws SQLException
+     */
+    public ResultSet getProductStats(int productId) throws SQLException {
+        String query = "SELECT AVG(rating), COUNT(DISTINCT transaction.user_id), " +
+                "SUM(transaction.quantity * product.price) " +
+                "FROM transaction INNER JOIN " +
+                "product ON transaction.product_id = product.product_id INNER JOIN " +
+                "review ON transaction.product_id = review.product_id " +
+                "WHERE transaction.product_id = ? " +
+                "GROUP BY transaction.product_id";
+        PreparedStatement prep = conn.prepareStatement(query);
+        prep.setInt(1, productId);
+        return prep.executeQuery();
+    }
+
+    /**
      * Close the connection.
      */
     public void closeConnection() {
