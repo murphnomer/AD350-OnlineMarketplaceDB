@@ -42,13 +42,26 @@ public class mySQLQuery {
      * @return - the Product object
      * @throws SQLException
      */
-    public Product getProductById(int id) throws SQLException{
+    public Product getProductById(int id) throws SQLException {
         String query = "SELECT product_id, name, type, price, qty_on_hand, description FROM product WHERE product_id = ?";
         PreparedStatement prep = conn.prepareStatement(query);
         prep.setInt(1, id);
         ResultSet rs = prep.executeQuery();
         rs.next();
         return new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getFloat(4), rs.getInt(5), rs.getString(6));
+    }
+
+    /**
+     * Delete a product given the id.
+     * @param id - row id
+     * @return - integer representing how many rows effected.
+     * @throws SQLException - sql error with the statement.
+     */
+    public int deleteProductById(int id) throws SQLException {
+        String query = "delete from product where product_id = ?";
+        PreparedStatement prep = conn.prepareStatement(query);
+        prep.setInt(1, id);
+        return prep.executeUpdate();
     }
 
     /**
