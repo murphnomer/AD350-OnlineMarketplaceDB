@@ -13,12 +13,10 @@ Contributors:
 
 ### Database
 
-- Run the provided sql script in your preferred mySQL GUI to get a database with dummy data loaded.
-
-![Normalized Database Diagram](images/Acme%20Online%20Marketplace%20ER%20Diagram.svg)
+1. Run the provided [sql script](house-of-fire.sql) in your preferred mySQL GUI to get a database with dummy data loaded.
 
 ### IntelliJ
-If you use a different code editor your steps may be different, but he concepts are the same.
+If you use a different code editor your steps may be different, but the concepts are the same.
 
 1. Install the mysql connector called Connector/J for your operating system https://dev.mysql.com/downloads/connector/j/
 2. Got to Project Structure which is under the menu icon in upper right corner
@@ -30,3 +28,6 @@ If you use a different code editor your steps may be different, but he concepts 
 7. Click apply and okay
 8. Run Main class
 
+### Database UML
+
+![Normalized Database Diagram](images/Acme%20Online%20Marketplace%20ER%20Diagram.svg)
