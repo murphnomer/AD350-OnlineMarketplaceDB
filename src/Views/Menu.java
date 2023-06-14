@@ -172,7 +172,11 @@ public class Menu {
                     int result = controller.updateStockQuantity(product.getId(), newQty);
                     System.out.println(result > 0 ? "Quantity updated successfully!" : "Product not found!");
                 }
-                case 4 -> System.out.println("Delete a product");
+                case 4 -> {
+                    int idToDelete = intInput("Enter the id of the product to delete: ");
+                    int result = controller.deleteProductById(idToDelete);
+                    System.out.println(result > 0 ? "The record was successfully deleted." : "The record was not deleted.");
+                }
                 case 5 -> {
                     ResultSet rs = controller.itemsSold(dateInput(true), dateInput(false), true);
                     printMostLeastPopResults(rs, true);
