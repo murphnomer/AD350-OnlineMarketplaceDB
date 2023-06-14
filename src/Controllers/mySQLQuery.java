@@ -47,7 +47,10 @@ public class mySQLQuery {
         PreparedStatement prep = conn.prepareStatement(query);
         prep.setInt(1, id);
         ResultSet rs = prep.executeQuery();
-        rs.next();
+        if (!rs.next()) {
+            System.out.println("No product with id " + id + ".  Please try again.");
+            return null;
+        }
         return new Product(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getFloat(4), rs.getInt(5), rs.getString(6));
     }
 

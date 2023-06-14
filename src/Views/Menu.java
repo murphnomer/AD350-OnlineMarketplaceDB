@@ -166,7 +166,8 @@ public class Menu {
                     System.out.println(rowsAdded + " added.");
                 }
                 case 3 -> {
-                    Product product = controller.getProductById(intInput("Enter id of product to update: "));
+                    Product product = null;
+                    while (product == null) product = controller.getProductById(intInput("Enter id of product to update: "));
                     printProductDetailPage(product.getId());
                     int newQty = intInput("Enter new stock quantity for " + product.getName() + " (Current qty " + product.getQty_on_hand() + "): ");
                     int result = controller.updateStockQuantity(product.getId(), newQty);
@@ -333,18 +334,20 @@ public class Menu {
         Product product = controller.getProductById(productId);
         ResultSet reviews = controller.getReviewsForProduct(productId);
         ResultSet productStats = controller.getProductStats(productId);
-        productStats.next();
+        boolean hasProductStats = productStats.next();
         System.out.println(product.getName());
         System.out.println(product.getType());
-        System.out.println("Unique purchasers: " + productStats.getInt(2) + "\t\t" +
-                "Total sales: " + NumberFormat.getCurrencyInstance().format(productStats.getFloat(3)));
+        if (hasProductStats) {
+            System.out.println("Unique purchasers: " + productStats.getInt(2) + "\t\t" +
+                    "Total sales: " + NumberFormat.getCurrencyInstance().format(productStats.getFloat(3)));
+        }
         System.out.println("-------------------------");
         System.out.println("Product description:");
         System.out.println();
         System.out.println(wrap(product.getDescription(),100));
         System.out.println();
         System.out.println();
-        System.out.println("Average rating: " + productStats.getFloat(1) + " / 5 stars");
+        if (hasProductStats) System.out.println("Average rating: " + productStats.getFloat(1) + " / 5 stars");
         System.out.println();
         System.out.println("Reviews:");
         System.out.println();
